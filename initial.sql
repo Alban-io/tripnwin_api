@@ -4,6 +4,7 @@
 CREATE TABLE IF NOT EXISTS `poi` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(64) NOT NULL,
+  `description` TEXT NOT NULL,
   `latitude` DECIMAL(10,7) NOT NULL,
   `longitude` DECIMAL(10,7) NOT NULL,
   PRIMARY KEY (`id`))
