@@ -28,6 +28,10 @@ class PoiPersister
 
     public function create($poi)
     {
-      $sql = 'INSERT INTO poi (`name`, `latitude`, `longitude`) VALUES (:)
+      $this->db->insert('poi', array(
+        'name' => $poi['name'],
+        'description' => $poi['description'],
+        'latitude' => $poi['latitude'],
+        'longitude' => $poi['longitude']));
     }
 }
