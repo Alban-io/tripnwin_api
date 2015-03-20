@@ -25,4 +25,9 @@ class PoiPersister
 
         return $stmt->fetch();
     }
+
+    public function create($poi)
+    {
+      $sql = 'INSERT INTO poi (`name`, `latitude`, `longitude`) VALUES (:)
+    }
 }
