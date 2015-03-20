@@ -47,10 +47,28 @@ class ImportCommand extends Command {
 
     $json = $json['infos_generales'][0];
 
-    $poi = array(
+    $description = $json['descriptif'];
+    $nom = $json['nom'];
 
-      'name' => $json['nom'],
-      'description' => $json['descriptif'],
+    if(is_array($description)) {
+      $description = json_encode($description);
+    }
+
+    if(is_array($nom)) {
+      $nom = json_encode($nom);
+    }
+
+    if(is_null($description)){
+      $description = 'Aucune description';
+    };
+
+    if(is_null($nom)){
+      $nom = 'Aucun nom';
+    }
+
+    $poi = array(
+      'name' => $nom,
+      'description' =>  strip_tags($description),
       'latitude' => $json['coord_geo_latitude'],
       'longitude' => $json['coord_geo_longitude']
     );
