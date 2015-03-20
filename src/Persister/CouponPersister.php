@@ -14,7 +14,7 @@ class CouponPersister
     public function findAllByPoiId($poiId)
     {
         $sql = <<<SQL
-            SELECT *
+            SELECT coupon.*
             FROM coupon
             JOIN poi_has_coupon ON (poi_has_coupon.coupon_id = coupon.id)
             WHERE poi_has_coupon.poi_id = ?
