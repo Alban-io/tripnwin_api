@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d9aebeb13821fabe662518b37364cc2d",
+    "hash": "1db820a31066577de33aa9e5b1b8fd38",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -473,6 +473,48 @@
             "time": "2014-09-09 13:34:57"
         },
         {
+            "name": "knplabs/console-service-provider",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/KnpLabs/ConsoleServiceProvider.git",
+                "reference": "1f1a3315409814d01702a47a8823549c6996de41"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/KnpLabs/ConsoleServiceProvider/zipball/1f1a3315409814d01702a47a8823549c6996de41",
+                "reference": "1f1a3315409814d01702a47a8823549c6996de41",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2",
+                "symfony/console": "~2.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Knp\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Knplabs",
+                    "homepage": "http://knplabs.com"
+                }
+            ],
+            "description": "console service provider for Silex",
+            "homepage": "http://knplabs.com",
+            "keywords": [
+                "console",
+                "silex"
+            ],
+            "time": "2013-06-13 12:43:39"
+        },
+        {
             "name": "pimple/pimple",
             "version": "v1.1.1",
             "source": {
@@ -637,6 +679,64 @@
                 "microframework"
             ],
             "time": "2015-01-20 16:45:58"
+        },
+        {
+            "name": "symfony/console",
+            "version": "v2.6.5",
+            "target-dir": "Symfony/Component/Console",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/Console.git",
+                "reference": "53f86497ccd01677e22435cfb7262599450a90d1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/53f86497ccd01677e22435cfb7262599450a90d1",
+                "reference": "53f86497ccd01677e22435cfb7262599450a90d1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "psr/log": "~1.0",
+                "symfony/event-dispatcher": "~2.1",
+                "symfony/phpunit-bridge": "~2.7",
+                "symfony/process": "~2.1"
+            },
+            "suggest": {
+                "psr/log": "For using the console logger",
+                "symfony/event-dispatcher": "",
+                "symfony/process": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.6-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Console\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Symfony Console Component",
+            "homepage": "http://symfony.com",
+            "time": "2015-03-13 17:37:22"
         },
         {
             "name": "symfony/debug",
@@ -963,7 +1063,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "knplabs/console-service-provider": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
