@@ -17,6 +17,9 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     ),
 ));
 
+$app['coupon_persister'] = function($app) {
+    return new CouponPersister($app['db']);
+};
 $app['poi_persister'] = function($app) {
     return new PoiPersister($app['db']);
 };

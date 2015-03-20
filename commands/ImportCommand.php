@@ -1,6 +1,13 @@
 <?php
 
-class ImportCommand extends Knp\Command\Command {
+namespace Commands;
+
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+
+class ImportCommand extends Command {
 
   protected function configure() {
 
@@ -20,9 +27,10 @@ class ImportCommand extends Knp\Command\Command {
 
     $pois = array();
 
-    foreach($data['pivot']['offre'] as $poi){
+    foreach($data['pivot']['offre'] as $jsonPOI){
 
-      $pois[] = $poi;
+      $pois[] = createPOI($jsonPOI);
+
 
     }
 
@@ -39,11 +47,5 @@ class ImportCommand extends Knp\Command\Command {
 
     return $poi;
 
-  }
-
-  protected function createCategory($json) {
-
-
-    return $category;
   }
 }
