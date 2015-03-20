@@ -1,5 +1,7 @@
 <?php
 
+namespace TripNWin\Persister;
+
 class PoiPersister
 {
     private $db;
