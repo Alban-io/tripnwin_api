@@ -2,12 +2,19 @@
 
 namespace TripNWin\Command;
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use Silex\Application;
+
 class ImportCommand extends Command {
+
+  public function __construct(Application $app, $name = null) {
+          parent::__construct($name);
+          $this->app = $app;
+  }
+
 
   protected function configure() {
 
@@ -29,8 +36,8 @@ class ImportCommand extends Command {
 
     foreach($data['pivot']['offre'] as $jsonPOI){
 
-      $pois[] = createPOI($jsonPOI);
-
+      $poi = $this->createPOI($jsonPOI);
+      $this->app['poi_persister']->create($poi);
 
     }
 
@@ -38,7 +45,10 @@ class ImportCommand extends Command {
 
   protected function createPOI($json) {
 
+    $json = $json['infos_generales'][0];
+
     $poi = array(
+
       'name' => $json['nom'],
       'description' => $json['descriptif'],
       'latitude' => $json['coord_geo_latitude'],
