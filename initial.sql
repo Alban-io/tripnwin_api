@@ -26,7 +26,7 @@ ENGINE = InnoDB;
 -- Table `question`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `question` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENTL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `poi_id` INT UNSIGNED NOT NULL,
   `label` TEXT NOT NULL,
   `right_answer` TEXT NOT NULL,
