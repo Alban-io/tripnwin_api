@@ -7,14 +7,12 @@ set_time_limit(0);
 
 (@include_once __DIR__ . '/../vendor/autoload.php') || @include_once __DIR__ . '/../../../autoload.php';
 
-require_once __DIR__ . '/../web/index.php';
-
 use Symfony\Component\Console\Application;
 
-$cli_app = new Application('TripNWin CLI Application', '0.1.0');
+$app = new Application('TripNWin Client', '0.1.0');
 
-$cli_app->addCommands(array(
-    new TripNWin\Command\ImportCommand($app),
+$app->addCommands(array(
+  new Commands\ImportCommand()
 ));
 
-$cli_app->run();
+$app->run();
