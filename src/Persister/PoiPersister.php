@@ -15,7 +15,15 @@ class PoiPersister
 
     public function findAll()
     {
-        return $this->db->fetchAll('SELECT * FROM poi ORDER BY name');
+        $sql = <<<SQL
+            SELECT poi.*, COUNT(poi_has_coupon.coupon_id) nb_coupons
+            FROM poi
+            LEFT JOIN poi_has_coupon ON (poi_has_coupon.poi_id = poi.id)
+            GROUP BY poi.id
+            ORDER BY name
+SQL;
+
+        return $this->db->fetchAll($sql);
     }
 
     public function findOneById($id)
@@ -31,6 +39,4 @@ class PoiPersister
     public function create($poi) {
         $this->db->insert('poi', $poi);
     }
-
-
 }
