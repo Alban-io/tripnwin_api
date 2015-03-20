@@ -1,5 +1,6 @@
 {
     "require": {
+	"knplabs/console-service-provider": "dev-master",
         "silex/silex": "~1.2"
     }
 }
