@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 
 // List of POIS (GET)
-$app->match('/pois', function () use ($app) {
+$app->match('/pois/', function () use ($app) {
     return new Response(json_encode($app['poi_persister']->findAll()));
 });
 
@@ -25,7 +25,7 @@ $app->match('/pois/{poiId}', function ($poiId) use ($app) {
 
 
 // List of Coupons (GET)
-$app->match('/pois/{poiId}/coupons', function ($poiId) use ($app) {
+$app->match('/pois/{poiId}/coupons/', function ($poiId) use ($app) {
     $poi = $app['poi_persister']->findOneById($poiId);
 
     if (false === $poi) {
