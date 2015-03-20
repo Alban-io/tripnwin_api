@@ -2,11 +2,13 @@
 
 namespace TripNWin\Persister;
 
+use Doctrine\DBAL\Connection;
+
 class PoiPersister
 {
     private $db;
 
-    public function __construct($db)
+    public function __construct(Connection $db)
     {
         $this->db = $db;
     }

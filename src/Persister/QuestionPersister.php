@@ -2,11 +2,13 @@
 
 namespace TripNWin\Persister;
 
+use Doctrine\DBAL\Connection;
+
 class QuestionPersister
 {
     private $db;
 
-    public function __construct($db)
+    public function __construct(Connection $db)
     {
         $this->db = $db;
     }
@@ -26,6 +28,16 @@ class QuestionPersister
 SQL;
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(1, $poiId);
+        $stmt->execute();
+
+        return $stmt->fetch();
+    }
+
+    public function findOneById($id)
+    {
+        $sql = 'SELECT * FROM question WHERE id = ?';
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(1, $id);
         $stmt->execute();
 
         return $stmt->fetch();

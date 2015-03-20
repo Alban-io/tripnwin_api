@@ -4,29 +4,28 @@ namespace TripNWin\Security;
 
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Doctrine\DBAL\Connection;
 
 class UserProvider implements UserProviderInterface
 {
-    private $conn;
+    private $db;
 
-    public function __construct(Connection $conn)
+    public function __construct(Connection $db)
     {
-        $this->conn = $conn;
+        $this->db = $db;
     }
 
     public function loadUserByUsername($username)
     {
-        $stmt = $this->conn->executeQuery('SELECT * FROM user WHERE email = ?', array(strtolower($username)));
+        $stmt = $this->db->executeQuery('SELECT * FROM user WHERE email = ?', array(strtolower($username)));
 
         if (!$user = $stmt->fetch()) {
             throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
         }
 
-        return new User($user['email'], $user['password'], [], true, true, true, true);
+        return new User($user['id'], $user['email'], $user['password']);
     }
 
     public function refreshUser(UserInterface $user)
