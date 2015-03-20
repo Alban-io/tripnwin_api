@@ -1,7 +1,10 @@
 {
     "require": {
-	     "knplabs/console-service-provider": "dev-master",
         "doctrine/dbal": "2.3.5",
+        "knplabs/console-service-provider": "dev-master",
         "silex/silex": "~1.2"
+    },
+    "autoload": {
+        "files": ["src/Persister/PoiPersister.php"]
     }
 }

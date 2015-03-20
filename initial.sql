@@ -3,15 +3,10 @@
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `poi` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `site_id` INT UNSIGNED NOT NULL,
   `name` VARCHAR(64) NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_poi_site_idx` (`site_id` ASC),
-  CONSTRAINT `fk_poi_site`
-    FOREIGN KEY (`site_id`)
-    REFERENCES `poi` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  `latitude` DECIMAL(10,7) NOT NULL,
+  `longitude` DECIMAL(10,7) NOT NULL,
+  PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 
