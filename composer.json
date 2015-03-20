@@ -1,6 +1,6 @@
 {
     "require": {
-	     "knplabs/console-service-provider": "dev-master",
+	      "symfony/console": "2.6",
         "doctrine/dbal": "2.3.5",
         "silex/silex": "~1.2"
     }
