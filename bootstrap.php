@@ -17,4 +17,8 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     ),
 ));
 
+$app['poi_persister'] = function($app) {
+    return new PoiPersister($app['db']);
+};
+
 return $app;
