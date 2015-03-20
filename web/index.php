@@ -25,7 +25,6 @@ $app->match('/pois/{poiId}', function ($poiId) use ($app) {
 
 
 // List of Coupons (GET)
-// @todo: tell if the user has already won a coupon
 $app->match('/pois/{poiId}/coupons', function ($poiId) use ($app) {
     $poi = $app['poi_persister']->findOneById($poiId);
 
@@ -33,7 +32,7 @@ $app->match('/pois/{poiId}/coupons', function ($poiId) use ($app) {
         $app->abort(404, "POI $poiId does not exist.");
     }
 
-    return new Response(json_encode($app['coupon_persister']->findAllByPoiId($poiId)));
+    return new Response(json_encode($app['coupon_persister']->findAllByPoiIdWithUserStatus($poiId, $app['security']->getToken()->getUser()->getId())));
 });
 
 
