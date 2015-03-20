@@ -4,6 +4,7 @@
 CREATE TABLE IF NOT EXISTS `poi` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(64) NOT NULL,
+  `description` TEXT NOT NULL,
   `latitude` DECIMAL(10,7) NOT NULL,
   `longitude` DECIMAL(10,7) NOT NULL,
   PRIMARY KEY (`id`))
@@ -25,7 +26,7 @@ ENGINE = InnoDB;
 -- Table `question`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `question` (
-  `id` INT NOT NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENTL,
   `poi_id` INT UNSIGNED NOT NULL,
   `label` TEXT NOT NULL,
   `right_answer` TEXT NOT NULL,
