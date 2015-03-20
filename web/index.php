@@ -7,8 +7,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 
 // List of POIS (GET)
-$app->match('/pois/', function () use ($app) {
-    return new Response(json_encode($app['poi_persister']->findAll()));
+$app->match('/pois', function () use ($app) {
+    return $app->json($app['poi_persister']->findAll());
 });
 
 
@@ -17,22 +17,22 @@ $app->match('/pois/{poiId}', function ($poiId) use ($app) {
     $poi = $app['poi_persister']->findOneById($poiId);
 
     if (false === $poi) {
-        $app->abort(404, "POI $poiId does not exist.");
+        $app->json("POI $poiId does not exist.", 404);
     }
 
-    return new Response(json_encode($poi));
+    return $app->json($poi);
 });
 
 
 // List of Coupons (GET)
-$app->match('/pois/{poiId}/coupons/', function ($poiId) use ($app) {
+$app->match('/pois/{poiId}/coupons', function ($poiId) use ($app) {
     $poi = $app['poi_persister']->findOneById($poiId);
 
     if (false === $poi) {
-        $app->abort(404, "POI $poiId does not exist.");
+        $app->json("POI $poiId does not exist.", 404);
     }
 
-    return new Response(json_encode($app['coupon_persister']->findAllByPoiIdWithUserStatus($poiId, $app['security']->getToken()->getUser()->getId())));
+    return $app->json($app['coupon_persister']->findAllByPoiIdWithUserStatus($poiId, $app['security']->getToken()->getUser()->getId()));
 });
 
 
@@ -41,12 +41,12 @@ $app->match('/pois/{poiId}/questions/random', function ($poiId) use ($app) {
     $poi = $app['poi_persister']->findOneById($poiId);
 
     if (false === $poi) {
-        $app->abort(404, "POI $poiId does not exist.");
+        $app->json("POI $poiId does not exist.", 404);
     }
 
     $question = $app['question_persister']->findOneRandomByPoiId($poiId);
     if (false === $question) {
-        $app->abort(404, "POI $poiId has no question.");
+        $app->json("POI $poiId has no question.", 404);
     }
 
     // Removes wich is the good answer and shuffle
@@ -62,42 +62,42 @@ $app->match('/pois/{poiId}/questions/random', function ($poiId) use ($app) {
     shuffle($answers);
     $question['choices'] = $answers;
 
-    return new Response(json_encode($question));
+    return $app->json($question);
 });
 
 
 // Play for a coupon (POST)
 $app->match('/pois/{poiId}/coupons/{couponId}/play', function (Request $request, $poiId, $couponId) use ($app) {
     if ('POST' !== $request->getMethod()) {
-        $app->abort(404, "This is a POST method");
+        $app->json("This is a POST method", 404);
     }
 
     $coupon = $app['coupon_persister']->findOneByIdAndPoiId($couponId, $poiId);
 
     if (false === $coupon) {
-        $app->abort(404, "POI $poiId and/or coupon $couponId does not exist.");
+        $app->json("POI $poiId and/or coupon $couponId does not exist.", 404);
     }
 
     $question = $app['question_persister']->findOneById($request->get('question_id'));
 
     if (false === $question) {
-        $app->abort(400, sprintf('The question %s does not exist.', $request->get('question_id')));
+        $app->json(sprintf('The question %s does not exist.', $request->get('question_id')), 400);
     }
 
     if ($poiId !== $question['poi_id']) {
-        $app->abort(400, sprintf("The question %s is not linked to POI $poiId.", $request->get('question_id')));
+        $app->json(sprintf("The question %s is not linked to POI $poiId.", $request->get('question_id')), 400);
     }
 
     if ($question['right_answer'] == $request->get('answer')) {
         $user = $app['security']->getToken()->getUser();
         $app['coupon_persister']->addWinner($couponId, $user->getId());
-        return new Response(json_encode(array(
+        return $app->json(array(
             'return'      => 'won',
             'coupon_code' => $couponId.'|'.$user->getId()
-        )));
+        ));
     }
 
-    return new Response(json_encode(array('return' => 'wrong')));
+    return $app->json(array('return' => 'wrong'));
 });
 
 
