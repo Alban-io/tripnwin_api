@@ -25,4 +25,10 @@ class PoiPersister
 
         return $stmt->fetch();
     }
+
+    public function create($poi) {
+        $this->db->insert('poi', $poi);
+    }
+
+
 }
