@@ -38,21 +38,30 @@ SQL;
         return $coupons;
     }
 
-    public function findOneByIdAndPoiId($couponId, $poiId)
+    public function findOneByIdAndPoiIdWithUserStatus($couponId, $poiId, $userId)
     {
         $sql = <<<SQL
-            SELECT coupon.*
+            SELECT coupon.*, COUNT(user_won_coupon.user_id) already_won
             FROM coupon
             JOIN poi_has_coupon ON (poi_has_coupon.coupon_id = coupon.id)
+            LEFT JOIN user_won_coupon ON (user_won_coupon.coupon_id = coupon.id)
             WHERE poi_has_coupon.poi_id = ?
             AND coupon.id = ?
+            AND (user_won_coupon.user_id IS NULL OR user_won_coupon.user_id = ?)
 SQL;
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(1, $poiId);
         $stmt->bindValue(2, $couponId);
+        $stmt->bindValue(3, $userId);
         $stmt->execute();
 
-        return $stmt->fetch();
+        $coupon = $stmt->fetch();
+
+        if (false !== $coupon) {
+            $coupon['already_won'] = $coupon['already_won'] == 1;
+        }
+
+        return $coupon;
     }
 
     public function addWinner($couponId, $userId)

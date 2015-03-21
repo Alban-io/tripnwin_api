@@ -49,6 +49,18 @@ $app->get('/pois/{poiId}/coupons', function (Request $request, $poiId) use ($app
 });
 
 
+// Coupon (GET)
+$app->get('/pois/{poiId}/coupons/{couponId}', function (Request $request, $poiId, $couponId) use ($app) {
+    $coupon = $app['coupon_persister']->findOneByIdAndPoiIdWithUserStatus($couponId, $poiId, $request->get('user_id'));
+
+    if (false === $coupon) {
+        return $app->json(array('error' => "POI $poiId and/or coupon $couponId does not exist."), 404);
+    }
+
+    return $app->json($coupon);
+});
+
+
 // Random question of a POI (GET)
 $app->get('/pois/{poiId}/questions/random', function ($poiId) use ($app) {
     $poi = $app['poi_persister']->findOneById($poiId);
@@ -81,10 +93,14 @@ $app->get('/pois/{poiId}/questions/random', function ($poiId) use ($app) {
 
 // Play for a coupon (POST)
 $app->post('/pois/{poiId}/coupons/{couponId}/play', function (Request $request, $poiId, $couponId) use ($app) {
-    $coupon = $app['coupon_persister']->findOneByIdAndPoiId($couponId, $poiId);
+    $coupon = $app['coupon_persister']->findOneByIdAndPoiIdWithUserStatus($couponId, $poiId, $request->get('user_id'));
 
     if (false === $coupon) {
         return $app->json(array('error' => "POI $poiId and/or coupon $couponId does not exist."), 404);
+    }
+
+    if (true === $coupon['already_won']) {
+        return $app->json(array('error' => "Coupon $couponId has already been won."), 400);
     }
 
     $data = json_decode($request->getContent(), true);
