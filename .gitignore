@@ -1,3 +1,4 @@
+*.pyc
 vendor/*
 config.php
 composer.lock
