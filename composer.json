@@ -4,7 +4,8 @@
         "symfony/security": "~2.6",
         "doctrine/dbal": "2.3.5",
         "knplabs/console-service-provider": "dev-master",
-        "silex/silex": "~1.2"
+        "silex/silex": "~1.2",
+        "jdesrosiers/silex-cors-provider": "~0.1"
     },
     "autoload": {
         "psr-4" : {

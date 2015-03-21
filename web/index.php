@@ -7,13 +7,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 
 // List of POIS (GET)
-$app->match('/pois', function () use ($app) {
+$app->get('/pois', function () use ($app) {
     return $app->json($app['poi_persister']->findAll());
 });
 
 
 // POI (GET)
-$app->match('/pois/{poiId}', function ($poiId) use ($app) {
+$app->get('/pois/{poiId}', function ($poiId) use ($app) {
     $poi = $app['poi_persister']->findOneById($poiId);
 
     if (false === $poi) {
@@ -25,19 +25,21 @@ $app->match('/pois/{poiId}', function ($poiId) use ($app) {
 
 
 // List of Coupons (GET)
-$app->match('/pois/{poiId}/coupons', function ($poiId) use ($app) {
+$app->get('/pois/{poiId}/coupons', function (Request $request, $poiId) use ($app) {
     $poi = $app['poi_persister']->findOneById($poiId);
 
     if (false === $poi) {
         $app->json("POI $poiId does not exist.", 404);
     }
 
-    return $app->json($app['coupon_persister']->findAllByPoiIdWithUserStatus($poiId, $app['security']->getToken()->getUser()->getId()));
+    // @todo reeanble security
+    // return $app->json($app['coupon_persister']->findAllByPoiIdWithUserStatus($poiId, $app['security']->getToken()->getUser()->getId()));
+    return $app->json($app['coupon_persister']->findAllByPoiIdWithUserStatus($poiId, $request->get('user_id')));
 });
 
 
 // Random question of a POI (GET)
-$app->match('/pois/{poiId}/questions/random', function ($poiId) use ($app) {
+$app->get('/pois/{poiId}/questions/random', function ($poiId) use ($app) {
     $poi = $app['poi_persister']->findOneById($poiId);
 
     if (false === $poi) {
@@ -67,7 +69,7 @@ $app->match('/pois/{poiId}/questions/random', function ($poiId) use ($app) {
 
 
 // Play for a coupon (POST)
-$app->match('/pois/{poiId}/coupons/{couponId}/play', function (Request $request, $poiId, $couponId) use ($app) {
+$app->post('/pois/{poiId}/coupons/{couponId}/play', function (Request $request, $poiId, $couponId) use ($app) {
     if ('POST' !== $request->getMethod()) {
         $app->json("This is a POST method", 404);
     }
@@ -88,17 +90,26 @@ $app->match('/pois/{poiId}/coupons/{couponId}/play', function (Request $request,
         $app->json(sprintf("The question %s is not linked to POI $poiId.", $request->get('question_id')), 400);
     }
 
+    // @todo reeanble security
+    // if ($question['right_answer'] == $request->get('answer')) {
+    //     $user = $app['security']->getToken()->getUser();
+    //     $app['coupon_persister']->addWinner($couponId, $user->getId());
+    //     return $app->json(array(
+    //         'return'      => 'won',
+    //         'coupon_code' => $couponId.'|'.$user->getId()
+    //     ));
+    // }
     if ($question['right_answer'] == $request->get('answer')) {
-        $user = $app['security']->getToken()->getUser();
-        $app['coupon_persister']->addWinner($couponId, $user->getId());
+        $app['coupon_persister']->addWinner($couponId, $request->get('user_id'));
         return $app->json(array(
             'return'      => 'won',
-            'coupon_code' => $couponId.'|'.$user->getId()
+            'coupon_code' => $couponId.'|'.$request->get('user_id')
         ));
     }
 
     return $app->json(array('return' => 'wrong'));
 });
 
+$app->after($app['cors']);
 
 $app->run();
