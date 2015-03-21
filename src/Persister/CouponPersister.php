@@ -23,6 +23,7 @@ class CouponPersister
             WHERE poi_has_coupon.poi_id = ?
             AND (user_won_coupon.user_id IS NULL OR user_won_coupon.user_id = ?)
             GROUP BY coupon.id
+            ORDER BY RAND()
 SQL;
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(1, $poiId);
