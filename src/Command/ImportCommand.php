@@ -37,7 +37,9 @@ class ImportCommand extends Command {
     foreach($data['pivot']['offre'] as $jsonPOI){
 
       $poi = $this->createPOI($jsonPOI);
-      $this->app['poi_persister']->create($poi);
+      // $this->app['poi_persister']->create($poi);
+
+      print_r($poi);
 
     }
 
@@ -45,10 +47,11 @@ class ImportCommand extends Command {
 
   protected function createPOI($json) {
 
-    $json = $json['infos_generales'][0];
+    $general = $json['infos_generales'][0];
+    $complements = $json['infos_complementaires'];
 
-    $description = $json['descriptif'];
-    $nom = $json['nom'];
+    $description = $general['descriptif'];
+    $nom = $general['nom'];
 
     if(is_array($description)) {
       $description = json_encode($description);
@@ -66,12 +69,38 @@ class ImportCommand extends Command {
       $nom = 'Aucun nom';
     }
 
-    $latitude = floatval($json['coord_geo_latitude']);
-    $longitude = floatval($json['coord_geo_longitude']);
+    $url = '';
+    $email = '';
+    $tel = '';
+
+    foreach($complements['tmoyencoms'] as $moyen) {
+      switch ($moyen['type']) {
+        case 'Site internet' :
+          $url = $moyen['coordonnees_moyen_com'];
+          break;
+        case 'Courriel' :
+          $email = $moyen['coordonnees_moyen_com'];
+          break;
+        case 'Téléphone' :
+          $tel = $moyen['coordonnees_moyen_com'];
+          break;
+      }
+    }
+
+    $latitude = floatval($general['coord_geo_latitude']);
+    $longitude = floatval($general['coord_geo_longitude']);
 
     $poi = array(
-      'name' => $nom,
-      'description' =>  strip_tags($description),
+      'name' => html_entity_decode($nom),
+      'description' =>  html_entity_decode($description),
+      'rue' => $general['rue'],
+      'localite' => $general['localite'],
+      'commune' => $general['commune'],
+      'province' => $general['province'],
+      'photo' => $complements['tannexess'][0]['url'],
+      'url' => $url,
+      'email' => $email,
+      'tel' => $tel,
       'latitude' => $latitude,
       'longitude' => $longitude,
       'latitude_sin' => sin(deg2rad($latitude)),
