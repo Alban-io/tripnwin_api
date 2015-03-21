@@ -51,12 +51,38 @@ class ImportCommand extends Command {
     $description = $general['descriptif'];
     $nom = $general['nom'];
 
+
     if(is_array($description)) {
-      $description = json_encode($description);
+      $description = implode(',' ,$description);
     }
 
+    $rue = $general['rue'];
+
+    if(is_array($rue)) {
+      $rue = implode(',' ,$rue);
+    }
+
+
     if(is_array($nom)) {
-      $nom = json_encode($nom);
+      $nom = implode(',' ,$nom);
+    }
+
+    $localite = $general['localite'];
+
+    if(is_array($localite)) {
+      $localite = implode(',', $localite);
+    }
+
+    $commune = $general['commune'];
+
+    if(is_array($commune)) {
+      $commune = implode(',', $commune);
+    }
+
+    $province = $general['province'];
+
+    if(is_array($province)) {
+      $province = implode(',', $province);
     }
 
     if(is_null($description)){
@@ -74,13 +100,26 @@ class ImportCommand extends Command {
     foreach($complements['tmoyencoms'] as $moyen) {
       switch ($moyen['type']) {
         case 'Site internet' :
+
           $url = $moyen['coordonnees_moyen_com'];
+          if(is_array($url)){
+            $url = implode($url);
+          }
+
           break;
         case 'Courriel' :
           $email = $moyen['coordonnees_moyen_com'];
+          if(is_array($email)){
+            $email = implode($email);
+          }
+
           break;
         case 'Téléphone' :
           $tel = $moyen['coordonnees_moyen_com'];
+
+          if(is_array($tel)){
+            $tel = implode($tel);
+          }
           break;
       }
     }
@@ -88,13 +127,19 @@ class ImportCommand extends Command {
     $latitude = floatval($general['coord_geo_latitude']);
     $longitude = floatval($general['coord_geo_longitude']);
 
+    $photo = $complements['tannexess'][0]['url'];
+
+    if(is_array($photo)){
+      $photo = implode(',', $photo);
+    }
+
     $poi = array(
       'name' => html_entity_decode($nom),
       'description' =>  html_entity_decode($description),
-      'rue' => $general['rue'],
-      'localite' => $general['localite'],
-      'commune' => $general['commune'],
-      'province' => $general['province'],
+      'rue' => $rue,
+      'localite' => $localite,
+      'commune' => $commune,
+      'province' => $province,
       'photo' => $complements['tannexess'][0]['url'],
       'url' => $url,
       'email' => $email,
