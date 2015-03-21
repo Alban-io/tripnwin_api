@@ -37,7 +37,7 @@ SQL;
             SELECT poi.*, COUNT(poi_has_coupon.coupon_id) nb_coupons, ROUND(DISTANCE(?, ?, ?, poi.latitude_cos, poi.latitude_sin, poi.longitude_rad)) distance
             FROM poi
             LEFT JOIN poi_has_coupon ON (poi_has_coupon.poi_id = poi.id)
-            WHERE @distance := DISTANCE(?, ?, ?, poi.latitude_cos, poi.latitude_sin, poi.longitude_rad) <= ?
+            WHERE DISTANCE(?, ?, ?, poi.latitude_cos, poi.latitude_sin, poi.longitude_rad) <= ?
             GROUP BY poi.id
             ORDER BY name
 SQL;
