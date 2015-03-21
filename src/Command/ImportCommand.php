@@ -37,9 +37,7 @@ class ImportCommand extends Command {
     foreach($data['pivot']['offre'] as $jsonPOI){
 
       $poi = $this->createPOI($jsonPOI);
-      // $this->app['poi_persister']->create($poi);
-
-      print_r($poi);
+      $this->app['poi_persister']->create($poi);
 
     }
 
