@@ -19,8 +19,8 @@ class ImportCommand extends Command {
   protected function configure() {
 
     $this
-    ->setName('importPOI')
-    ->setDescription('Import POIs Découvertes et divertissement');
+      ->setName('importPOI')
+      ->setDescription('Import POIs Découvertes et divertissement');
 
   }
 
@@ -127,7 +127,7 @@ class ImportCommand extends Command {
     $latitude = floatval($general['coord_geo_latitude']);
     $longitude = floatval($general['coord_geo_longitude']);
 
-    $photo = $complements['tannexess'][0]['url'];
+    $photo = array_key_exists(0, $complements['tannexess']) ? $complements['tannexess'][0]['url'] : null;
 
     if(is_array($photo)){
       $photo = implode(',', $photo);
@@ -140,7 +140,7 @@ class ImportCommand extends Command {
       'localite' => $localite,
       'commune' => $commune,
       'province' => $province,
-      'photo' => $complements['tannexess'][0]['url'],
+      'photo' => $photo,
       'url' => $url,
       'email' => $email,
       'tel' => $tel,
