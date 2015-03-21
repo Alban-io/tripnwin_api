@@ -5,8 +5,11 @@ CREATE TABLE IF NOT EXISTS `poi` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(64) NOT NULL,
   `description` TEXT NOT NULL,
-  `latitude` DECIMAL(10,7) NOT NULL,
-  `longitude` DECIMAL(10,7) NOT NULL,
+  `latitude` DECIMAL(18,14) NOT NULL,
+  `longitude` DECIMAL(18,14) NOT NULL,
+  `latitude_cos`DECIMAL(18,14) NOT NULL,
+  `latitude_sin`DECIMAL(18,14) NOT NULL,
+  `longitude_rad`DECIMAL(18,14) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -100,3 +103,22 @@ CREATE TABLE IF NOT EXISTS `poi_has_coupon` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
+
+DELIMITER $$
+DROP FUNCTION IF EXISTS `DISTANCE` $$
+CREATE FUNCTION `DISTANCE`(lat1_cos DOUBLE, lat1_sin DOUBLE, lng1 DOUBLE, lat2_cos DOUBLE, lat2_sin DOUBLE, lng2 DOUBLE) RETURNS DOUBLE
+DETERMINISTIC
+COMMENT 'DISTANCE function in kilometers'
+BEGIN
+    DECLARE distance DOUBLE;
+
+    SET distance = 6378.137 * ACOS(lat1_sin * lat2_sin + lat1_cos * lat2_cos * COS(lng1 - lng2));
+
+    IF distance IS NOT NULL THEN
+        RETURN distance;
+    ELSE
+        RETURN 0;
+    END IF;
+END $$
+DELIMITER ;

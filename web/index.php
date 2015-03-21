@@ -7,7 +7,18 @@ use Symfony\Component\HttpFoundation\Response;
 
 
 // List of POIS (GET)
-$app->get('/pois', function () use ($app) {
+$app->get('/pois', function (Request $request) use ($app) {
+
+    if (null !== ($latitude = $request->get('latitude')) &&
+        null !== ($longitude = $request->get('longitude'))) {
+
+        return $app->json($app['poi_persister']->findNearBy(
+            $latitude,
+            $longitude,
+            $request->get('radius', 50)
+        ));
+    }
+
     return $app->json($app['poi_persister']->findAll());
 });
 
