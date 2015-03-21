@@ -66,8 +66,8 @@ class ImportCommand extends Command {
       $nom = 'Aucun nom';
     }
 
-    $latitude = $json['coord_geo_latitude'];
-    $longitude = $json['coord_geo_longitude'];
+    $latitude = floatval($json['coord_geo_latitude']);
+    $longitude = floatval($json['coord_geo_longitude']);
 
     $poi = array(
       'name' => $nom,
