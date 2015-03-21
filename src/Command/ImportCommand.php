@@ -66,11 +66,17 @@ class ImportCommand extends Command {
       $nom = 'Aucun nom';
     }
 
+      $latitude = $json['coord_geo_latitude'];
+      $longitude = $json['coord_geo_longitude']
+
     $poi = array(
       'name' => $nom,
       'description' =>  strip_tags($description),
-      'latitude' => $json['coord_geo_latitude'],
-      'longitude' => $json['coord_geo_longitude']
+      'latitude' => $latitude,
+      'longitude' => $longitude,
+      'latitude_sin' => sin(deg2rad($latitude)),
+      'latitude_cos' => cos(deg2rad($latitude)),
+      'longitude_rad' => deg2rad($longitude)
     );
 
     return $poi;
